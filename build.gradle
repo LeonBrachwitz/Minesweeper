@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'application'
+    id "org.openjfx.javafxplugin" version "0.0.8"
 }
 
 group 'de.brachwitz.leon'
@@ -10,5 +12,25 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.17.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.2'
+}
+
+javafx {
+    modules = ['javafx.controls', 'javafx.fxml']
+    version = '14'
+}
+
+run {
+    doFirst {
+        jvmArgs = [
+                '--module-path', classpath.asPath,
+                '--add-modules', 'javafx.controls,javafx.fxml'
+        ]
+    }
+}
+
+test {
+    useJUnitPlatform()
 }
