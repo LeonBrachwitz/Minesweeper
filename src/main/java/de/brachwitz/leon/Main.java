@@ -1,4 +1,5 @@
+package de.brachwitz.leon;
+
 public class Main
 {
-    //TODO: implementieren
 }
