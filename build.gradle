@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'jacoco'
     id "org.openjfx.javafxplugin" version "0.0.8"
     id "org.sonarqube" version "3.0"
 }
@@ -38,10 +39,32 @@ test {
     useJUnitPlatform()
 }
 
+jacoco {
+    toolVersion = "0.8.7"
+    reportsDir = file("$buildDir/jacoco")
+}
+
+task mergeJacocoReports(type: JacocoReport) {
+    dependsOn test
+    sourceDirectories.setFrom files(sourceSets.main.allSource.srcDirs)
+    classDirectories.setFrom files(sourceSets.main.output)
+    executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/*.exec')
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+        html.destination file("${buildDir}/jacoco/merge")
+        xml.destination file("${buildDir}/jacoco/merge.xml")
+    }
+}
+
 sonarqube {
     properties {
         property "sonar.projectKey", "LeonBrachwitz_Minesweeper"
         property "sonar.organization", "leonbrachwitz"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/jacoco/merge.xml"
     }
 }
+
+tasks['sonarqube'].dependsOn mergeJacocoReports
