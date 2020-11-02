@@ -9,7 +9,7 @@ plugins {
 group 'de.brachwitz.leon'
 version '1.0-SNAPSHOT'
 
-mainClassName='de.brachwitz.leon.Main'
+mainClassName='de.brachwitz.leon.minesweeper.Main'
 
 repositories {
     mavenCentral()
